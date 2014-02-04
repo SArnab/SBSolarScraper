@@ -22,7 +22,9 @@ class SolarApi {
 		'ICResubmit'			=> 0,
 		'ICActionPrompt'		=> 'false',
 		'ICStateNum'			=> 0,
-		'SSR_CLSRCH_WRK_ACAD_CAREER$2'	=> 'UGRD'
+		'SSR_CLSRCH_WRK_ACAD_CAREER$2'	=> 'UGRD',
+		'SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3' => 'N',
+		'SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$3' => 'N'
 	);
 	private $response = NULL;
 	public $htmlParser = NULL;
