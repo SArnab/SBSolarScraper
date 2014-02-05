@@ -235,7 +235,22 @@ class SolarApi {
 			preg_match("/([0-9]{2})-([A-Z]+)\(([0-9]+)\)/",$sectionList[$x]->innertext,$matches);
 
 			// Process The Time
-			$meetingTimes = array();
+			$meetingTimes = array(
+				'monStart'	=> NULL,
+				'monEnd'	=> NULL,
+				'tueStart'	=> NULL,
+				'tueEnd'	=> NULL,
+				'wedStart'	=> NULL,
+				'wedEnd'	=> NULL,
+				'thuStart'	=> NULL,
+				'thuEnd'	=> NULL,
+				'friStart'	=> NULL,
+				'friEnd'	=> NULL
+				'satStart'	=> NULL,
+				'satEnd'	=> NULL,
+				'sunStart'	=> NULL,
+				'sunEnd'	=> NULL
+			);
 			if($timeList[$x]->innertext !== "TBA"){
 				preg_match("/([a-zA-Z]+) ([0-9]+):([0-9]+)(AM|PM) - ([0-9]+):([0-9]+)(AM|PM)/",$timeList[$x]->innertext,$time);
 
