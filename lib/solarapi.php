@@ -191,6 +191,13 @@ class SolarApi {
 		return $courses;
 	}
 
+	private function findValue($obj,$search,$index = 0){
+		$resultObj = $obj->find($search);
+		if(empty($resultObj)) return NULL;
+
+		return $resultObj[$index]->innertext;
+	}
+
 	private function extractClassSections($html,$id){
 		// Find All Sections Of The Course Represented By ID In The HTML
 		$sectionHTML = str_get_html($html->find('table[id=$ICField234$scroll$'.$id.']')[0]->innertext);
@@ -200,6 +207,28 @@ class SolarApi {
 		$timeList = $sectionHTML->find('span[id^=MTG_DAYTIME$]');
 		$sections = array();
 		for($x = 0;$x < count($sectionList); $x++){
+			// Get Extended Section Details
+			$this->setAction($sectionList[$x]->id);
+			$this->execCurl();
+
+			$xmlResponse = simplexml_load_string($this->response,"SimpleXMLElement");
+			$details = str_get_html((string)$xmlResponse->FIELD[2]);
+			unset($xmlResponse);
+
+			// Return To Search Results To Satisfy The Nazi Server
+			$this->setAction("CLASS_SRCH_WRK2_SSR_PB_BACK");
+			$this->execCurl();
+			
+			$courseCapacity = $details->find('span[id=SSR_CLS_DTL_WRK_ENRL_CAP]')[0]->innertext;
+			$enrollmentTotal = $details->find('span[id=SSR_CLS_DTL_WRK_ENRL_TOT]')[0]->innertext;
+			$availableSeats = $details->find('span[id=SSR_CLS_DTL_WRK_AVAILABLE_SEATS]')[0]->innertext;
+			$waitlistCapacity = $details->find('span[id=SSR_CLS_DTL_WRK_WAIT_CAP]')[0]->innertext;
+			$waitlistTotal = $details->find('span[id=SSR_CLS_DTL_WRK_WAIT_TOT]')[0]->innertext;
+			$description = $details->find('span[id=DERIVED_CLSRCH_DESCRLONG]')[0]->innertext;
+			$requirementDesignation = $this->findValue($details,'span[id=SSR_CLS_DTL_WRK_DESCRFORMAL]');
+			var_dump($requirementDesignation);
+			die();
+			
 			/*$this->printDebug($sectionList[$x]->innertext);
 			$this->printDebug("Instructor: ".$instructorList[$x]->innertext);
 			$this->printDebug("Location: ".$locationList[$x]->innertext);
@@ -256,7 +285,13 @@ class SolarApi {
 				'number'	=> $matches[1],
 				'type'		=> $matches[2],
 				'id'		=> $matches[3],
-				'time'		=> $timeList[$x]->innertext
+				'time'		=> $timeList[$x]->innertext,
+				'courseCapacity'	=> $courseCapacity,
+				'enrollmentTotal'	=> $enrollmentTotal,
+				'availableSeats'	=> $availableSeats,
+				'waitlistCapacity'	=> $waitlistCapacity,
+				'waitlistTotal'		=> $waitlistTotal,
+				'description'		=> $description
 			) + $meetingTimes;
 
 		}
