@@ -226,8 +226,6 @@ class SolarApi {
 			$waitlistTotal = $details->find('span[id=SSR_CLS_DTL_WRK_WAIT_TOT]')[0]->innertext;
 			$description = $details->find('span[id=DERIVED_CLSRCH_DESCRLONG]')[0]->innertext;
 			$requirementDesignation = $this->findValue($details,'span[id=SSR_CLS_DTL_WRK_DESCRFORMAL]');
-			var_dump($requirementDesignation);
-			die();
 			
 			/*$this->printDebug($sectionList[$x]->innertext);
 			$this->printDebug("Instructor: ".$instructorList[$x]->innertext);
